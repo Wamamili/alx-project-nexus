@@ -1,3 +1,42 @@
+Front End 
+
+Figma Structure:
+├── Design System
+│   ├── Colors
+│   ├── Typography Scale
+│   ├── Spacing System
+│   └── Component Library
+├── Wireframes
+│   ├── Mobile (375px)
+│   ├── Tablet (768px)
+│   └── Desktop (1440px)
+└── Prototypes
+    ├── User Flows
+    └── Interactive Elements
+    
+2.2 Project Structure
+
+    src/
+├── components/           # Reusable UI components
+│   ├── common/          # Button, Input, Loading
+│   ├── layout/          # Header, Footer, Sidebar
+│   └── product/         # Product-specific components
+├── features/            # Feature-based modules
+│   ├── productCatalog/  # Main catalog feature
+│   ├── filters/         # Filtering functionality
+│   └── cart/           # Shopping cart
+├── store/              # Redux store configuration
+│   ├── slices/         # Individual state slices
+│   └── index.ts        # Store setup
+├── services/           # API services
+│   ├── api.ts          # Axios configuration
+│   └── productAPI.ts   # Product-specific API calls
+├── hooks/              # Custom React hooks
+├── types/              # TypeScript definitions
+├── utils/              # Helper functions
+├── constants/          # App constants
+└── assets/             # Images, icons, styles
+
 🐳 Containerization & Orchestration
 Docker Setup
 dockerfile
