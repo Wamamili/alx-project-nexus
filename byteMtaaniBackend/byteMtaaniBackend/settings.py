@@ -37,10 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.auth', 
-    'django.contrib.contenttypes', 
+    
     'graphene_django', 
-    'core'
+    'mtaani_app',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +123,48 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+import os
+
+# Use custom user model from mtaani_app
+AUTH_USER_MODEL = 'mtaani_app.User'
+
+# Database: prefer Postgres when POSTGRES_DB is set (docker-compose), otherwise sqlite
+if os.getenv('POSTGRES_DB'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv('POSTGRES_DB'),
+            'USER': os.getenv('POSTGRES_USER', 'postgres'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+            'HOST': os.getenv('POSTGRES_HOST', 'db'),
+            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        }
+    }
+
+# Cache: use Redis when REDIS_URL provided or when running in compose (default to service name 'redis')
+REDIS_URL = os.getenv('REDIS_URL') or os.getenv('REDIS_HOST') or os.getenv('REDIS')
+if not REDIS_URL and os.getenv('DOCKER_COMPOSE') == '1':
+    REDIS_URL = 'redis://redis:6379/1'
+
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': REDIS_URL,
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+    }
+
+# Graphene (GraphQL) settings - point to the app schema
+GRAPHENE = {
+    'SCHEMA': 'mtaani_app.schema.schema'
+}
+

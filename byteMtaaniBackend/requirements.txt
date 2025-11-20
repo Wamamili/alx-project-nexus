@@ -1,0 +1,7 @@
+Django==5.2.4
+djangorestframework
+graphene-django
+django-redis
+graphql-jwt
+psycopg2-binary
+gunicorn

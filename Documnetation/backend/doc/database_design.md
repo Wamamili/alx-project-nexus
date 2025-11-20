@@ -18,7 +18,7 @@ Preserve historical transaction and pricing data.
 
 Remain extensible for future features such as inventory tracking or vendor onboarding.
 
-Core Tables
+Mtaani Table Tables
 
 The database includes the following primary tables:
 

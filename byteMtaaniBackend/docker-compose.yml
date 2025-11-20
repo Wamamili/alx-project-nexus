@@ -1,0 +1,33 @@
+services:
+  web:
+    build: .
+    command: gunicorn byteMtaaniBackend.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DJANGO_ENV=development
+      - DOCKER_COMPOSE=1
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: byte_mtaani
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
