@@ -55,4 +55,8 @@ Troubleshooting
 docker compose logs -f web
 ```
 
+Security and production notes
+- Use `.env.production` (based on `.env.production.example`) for production environment variables. Do NOT commit secrets to the repository.
+- The container will refuse to start in production (`DEBUG=False`) if `SECRET_KEY` is not set to a secure value.
+
 Want me to add a `Makefile` with convenient commands (build, up, down, logs)? I can add that next.

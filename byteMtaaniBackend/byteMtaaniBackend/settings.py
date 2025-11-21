@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,13 +20,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+import os
+import dj_database_url
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-33mh9e3yc9^=8@zb*ezh782)mbmch!w1s=mrqv9#j_ka4s!x3o'
+# Read SECRET_KEY from environment, fallback to a clearly unsafe default
+SECRET_KEY = os.getenv('SECRET_KEY', 'change-me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('1', 'true', 'yes')
 
-ALLOWED_HOSTS = []
+# Allowed hosts (comma-separated or '*' for all)
+_allowed = os.getenv('ALLOWED_HOSTS', '')
+if _allowed.strip() == '*' or _allowed.strip() == '':
+    ALLOWED_HOSTS = ['*'] if _allowed.strip() == '*' else []
+else:
+    ALLOWED_HOSTS = [h.strip() for h in _allowed.split(',') if h.strip()]
 
 
 # Application definition
@@ -38,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'graphene_django', 
+    'graphene_django',
+    'django_filters',
     'mtaani_app',
 ]
 
@@ -129,7 +140,13 @@ import os
 AUTH_USER_MODEL = 'mtaani_app.User'
 
 # Database: prefer Postgres when POSTGRES_DB is set (docker-compose), otherwise sqlite
-if os.getenv('POSTGRES_DB'):
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
+    # Parse DATABASE_URL if provided (dj-database-url)
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    }
+elif os.getenv('POSTGRES_DB'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -163,8 +180,15 @@ else:
         }
     }
 
-# Graphene (GraphQL) settings - point to the app schema
+# Graphene (GraphQL) settings - use combined CRM schema
 GRAPHENE = {
-    'SCHEMA': 'mtaani_app.schema.schema'
+    'SCHEMA': 'graphql_crm.schema.schema'
 }
+
+# Fail-fast checks for production
+if not DEBUG:
+    if not SECRET_KEY or SECRET_KEY in ('', 'change-me', 'your-secret-key'):
+        raise ImproperlyConfigured(
+            'SECRET_KEY is not set or is insecure. Set the SECRET_KEY environment variable for production.'
+        )
 
