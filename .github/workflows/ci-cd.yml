@@ -1,0 +1,83 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  backend-tests:
+    name: Backend — tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install backend dependencies
+        run: |
+          cd byteMtaaniBackend
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run backend tests
+        run: |
+          cd byteMtaaniBackend
+          python manage.py test --verbosity=1
+
+  frontend-build:
+    name: Frontend — build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install and build frontend
+        run: |
+          cd byteMtaani
+          npm ci
+          npm run build
+
+      - name: Run frontend tests (if present)
+        run: |
+          cd byteMtaani
+          npm test --if-present
+
+  build-and-push-images:
+    name: Build & Push Container Images (GHCR)
+    needs: [ backend-tests, frontend-build ]
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./byteMtaaniBackend
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/alx-project-nexus-backend:${{ github.sha }}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./byteMtaani
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/alx-project-nexus-frontend:${{ github.sha }}
