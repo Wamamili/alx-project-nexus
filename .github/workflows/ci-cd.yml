@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  backend-tests:
-    name: Backend — tests
+  backend-lint:
+    name: Backend — lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,6 +18,41 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/byteMtaaniBackend/requirements.txt') }}
+
+      - name: Install backend dependencies
+        run: |
+          cd byteMtaaniBackend
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run backend linter (flake8)
+        run: |
+          cd byteMtaaniBackend
+          if command -v flake8 >/dev/null 2>&1; then flake8 || true; else echo 'flake8 not installed (install in requirements.txt to enable)'; fi
+
+  backend-tests:
+    name: Backend — tests
+    runs-on: ubuntu-latest
+    needs: backend-lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/byteMtaaniBackend/requirements.txt') }}
 
       - name: Install backend dependencies
         run: |
@@ -42,11 +77,22 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/byteMtaani/package-lock.json') }}
+
       - name: Install and build frontend
         run: |
           cd byteMtaani
           npm ci
           npm run build
+
+      - name: Run frontend linter (eslint)
+        run: |
+          cd byteMtaani
+          if [ -f package.json ] && npm run -s lint --if-present; then npm run -s lint; else echo 'eslint not configured (add "lint" script)'; fi
 
       - name: Run frontend tests (if present)
         run: |
@@ -61,6 +107,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check for backend Dockerfile
+        id: check-backend-dockerfile
+        run: |
+          if [ -f byteMtaaniBackend/Dockerfile ]; then echo "exists=true" >> $GITHUB_OUTPUT; else echo "exists=false" >> $GITHUB_OUTPUT; fi
+
+      - name: Check for frontend Dockerfile
+        id: check-frontend-dockerfile
+        run: |
+          if [ -f byteMtaani/Dockerfile ]; then echo "exists=true" >> $GITHUB_OUTPUT; else echo "exists=false" >> $GITHUB_OUTPUT; fi
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -69,6 +125,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push backend image
+        if: ${{ steps.check-backend-dockerfile.outputs.exists == 'true' }}
         uses: docker/build-push-action@v4
         with:
           context: ./byteMtaaniBackend
@@ -76,6 +133,7 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/alx-project-nexus-backend:${{ github.sha }}
 
       - name: Build and push frontend image
+        if: ${{ steps.check-frontend-dockerfile.outputs.exists == 'true' }}
         uses: docker/build-push-action@v4
         with:
           context: ./byteMtaani

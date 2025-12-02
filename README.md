@@ -67,7 +67,7 @@ python manage.py runserver
 
 **Terminal 2 - Frontend:**
 ```powershell
-cd byteMtaani
+cd byteMtaaniFrontend
 npm install
 npm run dev
 ```
@@ -89,7 +89,7 @@ alx-project-nexus/
 ├── INTEGRATION_GUIDE.md               # Frontend-backend integration docs
 ├── INTEGRATION_STATUS.md              # Integration status report
 │
-├── byteMtaani/                        # Next.js Frontend
+├── byteMtaaniFrontend/                        # Next.js Frontend
 │   ├── app/                           # App Router pages & layouts
 │   │   ├── page.tsx                  # Home page
 │   │   ├── layout.jsx                # Root layout with Header/Footer
@@ -189,7 +189,7 @@ alx-project-nexus/
 ### Installation
 
 ```bash
-cd byteMtaani
+cd byteMtaaniFrontend
 npm install
 ```
 

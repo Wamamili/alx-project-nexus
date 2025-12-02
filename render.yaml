@@ -1,7 +1,7 @@
 # Render service manifest for Project Nexus (byteMtaani)
 #
 # This manifest defines two services:
-#  - byteMtaani-frontend: Node (Next.js) service located under `byteMtaani/`
+#  - byteMtaani-frontend: Node (Next.js) service located under `byteMtaaniFrontend/`
 #  - byteMtaani-backend: Docker service using `byteMtaaniBackend/Dockerfile`
 #
 # Replace placeholder values (service names, region, branch) and set the
@@ -15,8 +15,8 @@ services:
     # Optional: change region and branch to match your repo settings
     region: oregon
     branch: main
-    buildCommand: cd byteMtaani && npm ci && npm run build
-    startCommand: cd byteMtaani && npm run start
+    buildCommand: cd byteMtaaniFrontend && npm ci && npm run build
+    startCommand: cd byteMtaaniFrontend && npm run start
     envVars:
       - key: NEXT_PUBLIC_API_BASE
         # Set this to your backend's public URL after creating the backend service

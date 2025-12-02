@@ -1,13 +1,13 @@
-# byteMtaani (Next.js frontend)
+# byteMtaaniFrontend (Next.js frontend)
 
-This is a minimal Next.js + TypeScript frontend scaffold for the `byteMtaani` project.
+This is a minimal Next.js + TypeScript frontend scaffold for the `byteMtaaniFrontend` project.
 
 Quick start
 
 1. Install dependencies
 
 ```bash
-cd byteMtaani
+cd byteMtaaniFrontend
 npm install
 ```
 
