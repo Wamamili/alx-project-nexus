@@ -1,0 +1,26 @@
+Django==5.2.4
+djangorestframework
+django-redis
+psycopg2-binary
+gunicorn
+dj-database-url
+django-filter
+drf-yasg
+python-dotenv
+django-environ
+
+# HTTP client for external APIs
+requests>=2.30
+
+# Celery + scheduler / results
+celery>=5.2
+django-celery-beat>=2.4
+django-celery-results>=2.5
+
+# CORS support
+django-cors-headers
+
+# MySQL helper for local development (optional)
+PyMySQL>=1.0
+
+

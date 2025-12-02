@@ -1,0 +1,142 @@
+<mxfile host="app.diagrams.net" modified="2025-12-01T00:00:00.000Z" agent="5.0" version="24.1.0" type="device">
+  <diagram id="R2lEEEUBR5l0oGW1XyVA" name="ByteMtaani ERD">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- User Entity -->
+        <mxCell id="User" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="1" vertex="1">
+          <mxGeometry x="50" y="50" width="200" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="User_pk" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="User" vertex="1">
+          <mxGeometry y="26" width="200" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="User_attrs" value="username: String (unique)&#xa;email: String (unique)&#xa;is_admin: Boolean&#xa;is_staff: Boolean&#xa;date_joined: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="User" vertex="1">
+          <mxGeometry y="46" width="200" height="100" as="geometry"/>
+        </mxCell>
+        
+        <!-- Category Entity -->
+        <mxCell id="Category" value="Category" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="1" vertex="1">
+          <mxGeometry x="350" y="50" width="200" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="Category_pk" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Category" vertex="1">
+          <mxGeometry y="26" width="200" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="Category_attrs" value="category_name: String (unique)&#xa;url_key: String (unique)&#xa;created_at: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Category" vertex="1">
+          <mxGeometry y="46" width="200" height="80" as="geometry"/>
+        </mxCell>
+        
+        <!-- Product Entity -->
+        <mxCell id="Product" value="Product" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="1" vertex="1">
+          <mxGeometry x="350" y="280" width="220" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="Product_pk" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Product" vertex="1">
+          <mxGeometry y="26" width="220" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="Product_fk" value="# category_id: UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Product" vertex="1">
+          <mxGeometry y="46" width="220" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="Product_attrs" value="product_name: String&#xa;url_key: String (unique)&#xa;description: Text&#xa;price: Decimal&#xa;stock: Integer&#xa;in_stock: Boolean&#xa;image_url: String&#xa;created_at: DateTime&#xa;updated_at: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Product" vertex="1">
+          <mxGeometry y="66" width="220" height="130" as="geometry"/>
+        </mxCell>
+        
+        <!-- Order Entity -->
+        <mxCell id="Order" value="Order" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="1" vertex="1">
+          <mxGeometry x="50" y="280" width="200" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="Order_pk" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Order" vertex="1">
+          <mxGeometry y="26" width="200" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="Order_fk" value="# user_id: UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Order" vertex="1">
+          <mxGeometry y="46" width="200" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="Order_attrs" value="status: Enum (pending|paid|shipped|delivered|cancelled)&#xa;total_amount: Decimal&#xa;created_at: DateTime&#xa;updated_at: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Order" vertex="1">
+          <mxGeometry y="66" width="200" height="70" as="geometry"/>
+        </mxCell>
+        
+        <!-- OrderItem Entity -->
+        <mxCell id="OrderItem" value="OrderItem" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="480" width="220" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="OrderItem_pk" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="OrderItem" vertex="1">
+          <mxGeometry y="26" width="220" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="OrderItem_fk" value="# order_id: UUID (FK)&#xa;# product_id: UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="OrderItem" vertex="1">
+          <mxGeometry y="46" width="220" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="OrderItem_attrs" value="quantity: PositiveInteger&#xa;price: Decimal" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="OrderItem" vertex="1">
+          <mxGeometry y="76" width="220" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- Payment Entity -->
+        <mxCell id="Payment" value="Payment" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="1" vertex="1">
+          <mxGeometry x="50" y="480" width="220" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="Payment_pk" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Payment" vertex="1">
+          <mxGeometry y="26" width="220" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="Payment_fk" value="# user_id: UUID (FK)&#xa;# order_id: UUID (FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Payment" vertex="1">
+          <mxGeometry y="46" width="220" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="Payment_attrs" value="amount: Decimal&#xa;method: Enum (mpesa|card|paypal)&#xa;status: Enum (pending|successful|failed)&#xa;transaction_id: String (unique)&#xa;paid_at: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Payment" vertex="1">
+          <mxGeometry y="76" width="220" height="80" as="geometry"/>
+        </mxCell>
+        
+        <!-- Relationships -->
+        <!-- User -> Order (One-to-Many) -->
+        <mxCell id="User_Order_Rel" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=crow;endFill=0;startArrow=none;" parent="1" source="User" target="Order" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="200" as="sourcePoint"/>
+            <mxPoint x="150" y="280" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- User -> Payment (One-to-Many) -->
+        <mxCell id="User_Payment_Rel" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=crow;endFill=0;startArrow=none;" parent="1" source="User" target="Payment" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="200" as="sourcePoint"/>
+            <mxPoint x="100" y="480" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Category -> Product (One-to-Many) -->
+        <mxCell id="Category_Product_Rel" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=crow;endFill=0;startArrow=none;" parent="1" source="Category" target="Product" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="180" as="sourcePoint"/>
+            <mxPoint x="450" y="280" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Order -> OrderItem (One-to-Many) -->
+        <mxCell id="Order_OrderItem_Rel" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=crow;endFill=0;startArrow=none;" parent="1" source="Order" target="OrderItem" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="420" as="sourcePoint"/>
+            <mxPoint x="250" y="480" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Product -> OrderItem (One-to-Many) -->
+        <mxCell id="Product_OrderItem_Rel" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=crow;endFill=0;startArrow=none;" parent="1" source="Product" target="OrderItem" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="460" as="sourcePoint"/>
+            <mxPoint x="350" y="480" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Order -> Payment (One-to-One) -->
+        <mxCell id="Order_Payment_Rel" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=crow;endFill=0;startArrow=none;" parent="1" source="Order" target="Payment" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="420" as="sourcePoint"/>
+            <mxPoint x="150" y="480" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="Legend" value="Relationships:&#xa;——┐ = One-to-Many (1 to N)&#xa;——| = One-to-One (1 to 1)&#xa;PK = Primary Key&#xa;FK = Foreign Key" style="text;fontSize=10;align=left;verticalAlign=top;rounded=1;fillColor=#f5f5f5;strokeColor=#cccccc;" parent="1" vertex="1">
+          <mxGeometry x="50" y="700" width="300" height="80" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,281 @@
+{
+  "categories": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "category_name": "Electronics",
+      "url_key": "electronics",
+      "created_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "category_name": "Computers",
+      "url_key": "computers",
+      "created_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "category_name": "Accessories",
+      "url_key": "accessories",
+      "created_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "category_name": "Phones",
+      "url_key": "phones",
+      "created_at": "2025-01-01T10:00:00Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440000",
+      "product_name": "Wireless Earbuds Pro",
+      "url_key": "wireless-earbuds-pro",
+      "description": "High-quality wireless earbuds with noise cancellation and 24-hour battery life",
+      "price": "2499.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440000",
+      "stock": 45,
+      "in_stock": true,
+      "image_url": "/images/products/earbuds-pro.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440001",
+      "product_name": "Gaming Controller",
+      "url_key": "gaming-controller",
+      "description": "Professional gaming controller with haptic feedback and customizable buttons",
+      "price": "4599.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440002",
+      "stock": 0,
+      "in_stock": false,
+      "image_url": "/images/products/controller.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-02T14:30:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440002",
+      "product_name": "Smartphone X Pro",
+      "url_key": "smartphone-x-pro",
+      "description": "Latest flagship smartphone with 5G support and advanced camera system",
+      "price": "49999.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440003",
+      "stock": 15,
+      "in_stock": true,
+      "image_url": "/images/products/phone-x-pro.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440003",
+      "product_name": "Laptop Ultrabook 15",
+      "url_key": "laptop-ultrabook-15",
+      "description": "Lightweight ultrabook with 15-inch display, 16GB RAM, and SSD storage",
+      "price": "89999.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440001",
+      "stock": 8,
+      "in_stock": true,
+      "image_url": "/images/products/laptop-ultrabook.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440004",
+      "product_name": "USB-C Cable 3m",
+      "url_key": "usb-c-cable-3m",
+      "description": "Durable USB-C cable with fast charging and data transfer support",
+      "price": "399.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440002",
+      "stock": 120,
+      "in_stock": true,
+      "image_url": "/images/products/usb-cable.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440005",
+      "product_name": "4K Monitor 32 inch",
+      "url_key": "4k-monitor-32",
+      "description": "Professional 4K monitor with 99% color accuracy and HDR support",
+      "price": "35999.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440001",
+      "stock": 5,
+      "in_stock": true,
+      "image_url": "/images/products/monitor-4k.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440006",
+      "product_name": "Wireless Mouse",
+      "url_key": "wireless-mouse",
+      "description": "Ergonomic wireless mouse with silent clicks and 18-month battery",
+      "price": "1299.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440002",
+      "stock": 75,
+      "in_stock": true,
+      "image_url": "/images/products/wireless-mouse.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440007",
+      "product_name": "Mechanical Keyboard RGB",
+      "url_key": "mechanical-keyboard-rgb",
+      "description": "Premium mechanical keyboard with RGB backlighting and custom switches",
+      "price": "7999.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440002",
+      "stock": 25,
+      "in_stock": true,
+      "image_url": "/images/products/keyboard-rgb.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440008",
+      "product_name": "Tablet Pro 12",
+      "url_key": "tablet-pro-12",
+      "description": "Powerful tablet with stylus support and 120Hz display",
+      "price": "45999.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440003",
+      "stock": 0,
+      "in_stock": false,
+      "image_url": "/images/products/tablet-pro.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-02T09:00:00Z"
+    },
+    {
+      "id": "650e8400-e29b-41d4-a716-446655440009",
+      "product_name": "Webcam 4K",
+      "url_key": "webcam-4k",
+      "description": "Professional 4K webcam with auto-focus and noise-reducing microphone",
+      "price": "8999.99",
+      "category_id": "550e8400-e29b-41d4-a716-446655440002",
+      "stock": 30,
+      "in_stock": true,
+      "image_url": "/images/products/webcam-4k.jpg",
+      "created_at": "2025-01-01T10:00:00Z",
+      "updated_at": "2025-01-01T10:00:00Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "750e8400-e29b-41d4-a716-446655440000",
+      "username": "john_doe",
+      "email": "john@example.com",
+      "is_admin": false,
+      "is_staff": false,
+      "date_joined": "2025-01-01T08:00:00Z"
+    },
+    {
+      "id": "750e8400-e29b-41d4-a716-446655440001",
+      "username": "jane_smith",
+      "email": "jane@example.com",
+      "is_admin": false,
+      "is_staff": false,
+      "date_joined": "2025-01-02T08:00:00Z"
+    },
+    {
+      "id": "750e8400-e29b-41d4-a716-446655440002",
+      "username": "admin_user",
+      "email": "admin@example.com",
+      "is_admin": true,
+      "is_staff": true,
+      "date_joined": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "850e8400-e29b-41d4-a716-446655440000",
+      "user_id": "750e8400-e29b-41d4-a716-446655440000",
+      "status": "pending",
+      "total_amount": "2499.99",
+      "created_at": "2025-01-15T10:30:00Z",
+      "updated_at": "2025-01-15T10:30:00Z"
+    },
+    {
+      "id": "850e8400-e29b-41d4-a716-446655440001",
+      "user_id": "750e8400-e29b-41d4-a716-446655440000",
+      "status": "paid",
+      "total_amount": "52499.98",
+      "created_at": "2025-01-14T14:00:00Z",
+      "updated_at": "2025-01-15T09:00:00Z"
+    },
+    {
+      "id": "850e8400-e29b-41d4-a716-446655440002",
+      "user_id": "750e8400-e29b-41d4-a716-446655440001",
+      "status": "shipped",
+      "total_amount": "10299.97",
+      "created_at": "2025-01-13T11:20:00Z",
+      "updated_at": "2025-01-15T08:15:00Z"
+    }
+  ],
+  "order_items": [
+    {
+      "id": "950e8400-e29b-41d4-a716-446655440000",
+      "order_id": "850e8400-e29b-41d4-a716-446655440000",
+      "product_id": "650e8400-e29b-41d4-a716-446655440000",
+      "quantity": 1,
+      "price": "2499.99"
+    },
+    {
+      "id": "950e8400-e29b-41d4-a716-446655440001",
+      "order_id": "850e8400-e29b-41d4-a716-446655440001",
+      "product_id": "650e8400-e29b-41d4-a716-446655440002",
+      "quantity": 1,
+      "price": "49999.99"
+    },
+    {
+      "id": "950e8400-e29b-41d4-a716-446655440002",
+      "order_id": "850e8400-e29b-41d4-a716-446655440001",
+      "product_id": "650e8400-e29b-41d4-a716-446655440004",
+      "quantity": 2,
+      "price": "399.99"
+    },
+    {
+      "id": "950e8400-e29b-41d4-a716-446655440003",
+      "order_id": "850e8400-e29b-41d4-a716-446655440002",
+      "product_id": "650e8400-e29b-41d4-a716-446655440006",
+      "quantity": 2,
+      "price": "1299.99"
+    },
+    {
+      "id": "950e8400-e29b-41d4-a716-446655440004",
+      "order_id": "850e8400-e29b-41d4-a716-446655440002",
+      "product_id": "650e8400-e29b-41d4-a716-446655440007",
+      "quantity": 1,
+      "price": "7999.99"
+    }
+  ],
+  "payments": [
+    {
+      "id": "a50e8400-e29b-41d4-a716-446655440000",
+      "user_id": "750e8400-e29b-41d4-a716-446655440000",
+      "order_id": "850e8400-e29b-41d4-a716-446655440001",
+      "amount": "52499.98",
+      "method": "mpesa",
+      "status": "successful",
+      "transaction_id": "LR2H29WKPX",
+      "paid_at": "2025-01-15T09:05:00Z"
+    },
+    {
+      "id": "a50e8400-e29b-41d4-a716-446655440001",
+      "user_id": "750e8400-e29b-41d4-a716-446655440001",
+      "order_id": "850e8400-e29b-41d4-a716-446655440002",
+      "amount": "10299.97",
+      "method": "mpesa",
+      "status": "successful",
+      "transaction_id": "QR5K31XLPQ",
+      "paid_at": "2025-01-14T12:00:00Z"
+    },
+    {
+      "id": "a50e8400-e29b-41d4-a716-446655440002",
+      "user_id": "750e8400-e29b-41d4-a716-446655440000",
+      "order_id": "850e8400-e29b-41d4-a716-446655440000",
+      "amount": "2499.99",
+      "method": "mpesa",
+      "status": "pending",
+      "transaction_id": "",
+      "paid_at": null
+    }
+  ]
+}

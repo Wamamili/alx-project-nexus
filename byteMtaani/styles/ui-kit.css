@@ -1,0 +1,21 @@
+/* small helper css; works with Tailwind but kept separate so you don't overwrite project styles */
+:root {
+    --byte-primary: #0a66c2;
+    /* adjust to your brand color */
+}
+
+/* utility to reference in className if needed */
+.bg-byte-primary {
+    background-color: var(--byte-primary);
+}
+
+.text-byte-primary {
+    color: var(--byte-primary);
+}
+
+/* small responsive helpers if you want */
+@media (min-width: 1024px) {
+    .grid-lg-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}

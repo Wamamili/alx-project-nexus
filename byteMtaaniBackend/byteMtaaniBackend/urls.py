@@ -1,0 +1,66 @@
+"""
+URL configuration for byteMtaaniBackend project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/5.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path, include, re_path
+from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
+from mtaani_app.views import (
+    ProductViewSet, CategoryViewSet, OrderViewSet, CustomerViewSet, PaymentViewSet
+)
+from mtaani_app.views import production_list, cache_metrics
+from mtaani_app.views import mpesa_callback
+from django.conf import settings
+
+try:
+    from drf_yasg.views import get_schema_view
+    from drf_yasg import openapi
+    from rest_framework import permissions as drf_permissions
+    SWAGGER_ENABLED = True
+except Exception:
+    SWAGGER_ENABLED = False
+
+router = routers.DefaultRouter()
+router.register(r'products', ProductViewSet, basename='product')
+router.register(r'categories', CategoryViewSet, basename='category')
+router.register(r'orders', OrderViewSet, basename='order')
+router.register(r'customers', CustomerViewSet, basename='customer')
+router.register(r'payments', PaymentViewSet, basename='payment')
+# API URL patterns
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
+    path('api-token-auth/', obtain_auth_token),
+    path('productions/', production_list),
+    path('cache-metrics/', cache_metrics),
+    path('mpesa/callback/', mpesa_callback),
+]
+# Swagger / OpenAPI documentation
+if SWAGGER_ENABLED:
+    schema_view = get_schema_view(
+        openapi.Info(
+            title="Byte Mtaani API",
+            default_version='v1',
+            description="API documentation",
+        ),
+        public=True,
+        permission_classes=(drf_permissions.AllowAny,),
+    )
+    urlpatterns += [
+        re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+        path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+        path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    ]
