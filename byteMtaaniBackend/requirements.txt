@@ -24,3 +24,7 @@ django-cors-headers
 PyMySQL>=1.0
 
 
+# Timezone data for Python's zoneinfo on platforms without system tzdata
+tzdata
+
+

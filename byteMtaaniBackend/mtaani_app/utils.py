@@ -1,6 +1,7 @@
 import logging
 from django.core.cache import cache
 from django_redis import get_redis_connection
+from redis.exceptions import ConnectionError as RedisConnectionError
 from .models import Product
 
 logger = logging.getLogger(__name__)
@@ -15,15 +16,31 @@ def get_all_properties():
     semantics expected by callers.
     """
     key = 'all_properties'
-    ids = cache.get(key)
+    try:
+        ids = cache.get(key)
+    except RedisConnectionError:
+        # Redis is unavailable — log and fall back to DB
+        logger.exception('Redis unavailable when attempting cache.get(%s); falling back to DB', key)
+        ids = None
+    except Exception:
+        # Any other cache backend error — don't let this break the view
+        logger.exception('Unexpected cache error when reading %s; falling back to DB', key)
+        ids = None
+
     if ids is not None:
         # return a queryset reconstructed from cached ids
         qs = Product.objects.filter(pk__in=ids)
         return qs
 
-    # cache miss: fetch ids and cache them
+    # cache miss or cache unavailable: fetch ids and attempt to cache them
     ids = list(Product.objects.values_list('pk', flat=True))
-    cache.set(key, ids, 3600)
+    try:
+        cache.set(key, ids, 3600)
+    except RedisConnectionError:
+        logger.exception('Redis unavailable when attempting cache.set(%s); continuing without cache', key)
+    except Exception:
+        logger.exception('Unexpected cache error when setting %s; continuing without cache', key)
+
     return Product.objects.filter(pk__in=ids)
 
 

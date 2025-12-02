@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Productions – API View</title>
+
+  <style>
+    /* Base DRF-style theme */
+    body {
+      margin: 0;
+      font-family: "Roboto","Segoe UI", Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    header {
+      background: #3f4750;
+      padding: 16px 24px;
+      color: white;
+      border-bottom: 3px solid #2b3137;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 32px auto;
+      background: white;
+      padding: 24px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* DRF toolbar-like section (optional) */
+    .toolbar {
+      background: #fafafa;
+      padding: 12px 16px;
+      border: 1px solid #e1e1e1;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toolbar span {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .toolbar a {
+      text-decoration: none;
+      color: #3f83f8;
+      font-size: 14px;
+    }
+
+    /* Grid cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 16px;
+      background: #fff;
+      transition: 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: #3f83f8;
+      box-shadow: 0 2px 6px rgba(63,131,248,0.15);
+    }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: contain;
+      border: 1px solid #eee;
+      background: #fafafa;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: #2b3137;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+      min-height: 40px;
+    }
+
+    .price {
+      font-size: 16px;
+      font-weight: 700;
+      color: #008060;
+      margin-top: 10px;
+    }
+
+    /* Footer (DRF-like) */
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>{{ title|default:"API" }} API</h1>
+  </header>
+
+  <div class="container">
+
+    <div class="toolbar">
+      <span>Browsable API</span>
+      <div>
+        <a id="view-list" href="#" onclick="showView('list');return false;">API List</a>
+        &nbsp;|&nbsp;
+        <a id="view-json" href="#" onclick="showView('json');return false;">Raw JSON</a>
+      </div>
+    </div>
+
+    <!-- CRUD form: allow quick POST / GET / PATCH against the API from this page -->
+    <div class="toolbar" style="margin-top:12px;">
+      <span>Quick CRUD</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="crud-endpoint">
+          <option value="products">Products</option>
+          <option value="categories">Categories</option>
+          <option value="orders">Orders</option>
+          <option value="customers">Customers</option>
+          <option value="payments">Payments</option>
+        </select>
+        <select id="crud-method">
+          <option value="GET">GET (list)</option>
+          <option value="POST">POST (create)</option>
+          <option value="PATCH">PATCH (update)</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+        <input id="crud-id" placeholder="id (for PATCH/DELETE)" style="width:160px;padding:6px;border-radius:4px;border:1px solid #ddd" />
+        <button id="crud-sample" class="btn" onclick="loadSample();return false;">Load sample JSON</button>
+      </div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <textarea id="crud-body" placeholder='{"key": "value"} — JSON body for POST/PATCH' style="width:100%;height:140px;padding:12px;border-radius:6px;border:1px solid #e6e6e6"></textarea>
+      <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+        <button id="crud-submit" onclick="performCrud();return false;" class="btn">Send</button>
+        <span style="color:#666;font-size:13px">Requests use credentials; ensure you're logged in if the endpoint requires auth.</span>
+      </div>
+      <pre id="crud-result" style="margin-top:10px;background:#111;color:#efe;padding:12px;border-radius:6px;overflow:auto;max-height:340px;white-space:pre-wrap"></pre>
+    </div>
+
+    <!-- API endpoints list (namespaces) -->
+    <div id="api-list" style="margin-bottom:20px;">
+      <h2>API Endpoints</h2>
+      {% if namespaces %}
+        <ul>
+          {% for name, url in namespaces.items %}
+            <li><a href="{{ url }}">{{ name|capfirst }}</a> — <small>{{ url }}</small></li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No API namespaces available.</p>
+      {% endif %}
+    </div>
+
+    <!-- If view provides items/products data, render grid; otherwise skip -->
+    {% if items %}
+      <div id="items-grid" class="grid" style="margin-bottom:20px;">
+        {% for it in items %}
+          <div class="card">
+            {% if it.image %}
+              <img src="{{ it.image }}" alt="{{ it.product_name|default:it.name }}">
+            {% endif %}
+
+            <div class="title">{{ it.product_name|default:it.name|default:it.title|default:it.id }}</div>
+            <div class="desc">{{ it.description|default:it.summary|default:'' }}</div>
+            <div class="price">{{ it.price|default:'' }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% elif products %}
+      <div id="products-grid" class="grid" style="margin-bottom:20px;">
+        {% for p in products %}
+          <div class="card">
+            {% if p.image %}
+              <img src="{{ p.image }}" alt="{{ p.product_name|default:p.name }}">
+            {% endif %}
+
+            <div class="title">{{ p.product_name|default:p.name }}</div>
+            <div class="desc">{{ p.description }}</div>
+            <div class="price">{{ p.price }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Raw JSON section (hidden by default) -->
+    <div id="raw-json" style="display:none;">
+      <h2>Raw JSON</h2>
+      {# Safely embed JSON using json_script, then pretty-print via JS #}
+      {% if namespaces %}
+        {{ namespaces|json_script:"namespaces-data" }}
+      {% else %}
+        <script id="namespaces-data" type="application/json">{}</script>
+      {% endif %}
+      {% if products %}
+        {{ products|json_script:"products-data" }}
+      {% else %}
+        <script id="products-data" type="application/json">null</script>
+      {% endif %}
+      {% if items %}
+        {{ items|json_script:"items-data" }}
+      {% else %}
+        <script id="items-data" type="application/json">null</script>
+      {% endif %}
+
+      <pre id="json-output" style="white-space:pre-wrap;background:#f7f7f7;border:1px solid #e6e6e6;padding:12px;border-radius:6px;overflow:auto;max-height:480px"></pre>
+    </div>
+
+  </div>
+
+  <footer>
+    Django REST Framework Styled View • {{ now|date:"Y" }}
+  </footer>
+
+</body>
+</html>
+
+<script>
+  // Toggle views between API list and raw JSON. If JSON data is embedded via
+  // json_script tags, pretty-print it into the #json-output element.
+  function showView(name){
+    document.getElementById('api-list').style.display = name === 'list' ? '' : 'none';
+    var pg = document.getElementById('products-grid'); if(pg) pg.style.display = name === 'list' ? '' : 'none';
+    var itg = document.getElementById('items-grid'); if(itg) itg.style.display = name === 'list' ? '' : 'none';
+    document.getElementById('raw-json').style.display = name === 'json' ? '' : 'none';
+    if(name === 'json'){
+      try{
+        var nsEl = document.getElementById('namespaces-data');
+        var ns = nsEl ? JSON.parse(nsEl.textContent || '{}') : {};
+        var out = { namespaces: ns };
+        var iEl = document.getElementById('items-data');
+        if(iEl && iEl.textContent && iEl.textContent.trim() !== 'null'){
+          out.items = JSON.parse(iEl.textContent || 'null');
+        } else {
+          var pEl = document.getElementById('products-data');
+          if(pEl && pEl.textContent && pEl.textContent.trim() !== 'null'){
+            out.products = JSON.parse(pEl.textContent || 'null');
+          }
+        }
+        document.getElementById('json-output').textContent = JSON.stringify(out, null, 2);
+      }catch(e){ document.getElementById('json-output').textContent = 'Error rendering JSON: '+e }
+    }
+  }
+
+  // Show list by default
+  document.addEventListener('DOMContentLoaded', function(){ showView('list'); });
+  
+  // ------------------ CRUD helper functions ------------------
+  function getCookie(name){
+    const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return v ? v.pop() : '';
+  }
+
+  function loadSample(){
+    const ep = document.getElementById('crud-endpoint').value;
+    const samples = {
+      products: { product_name: 'Sample product', price: '9.99', description: 'Sample description' },
+      categories: { name: 'Sample category', description: 'Category description' },
+      customers: { username: 'sampleuser', email: 'user@example.com' },
+      orders: { user_id: null, items: [{ product_id: null, quantity: 1 }] },
+      payments: { order_id: null, phone: '2547XXXXXXXX' }
+    };
+    document.getElementById('crud-body').value = JSON.stringify(samples[ep] || {}, null, 2);
+    document.getElementById('crud-result').textContent = '';
+  }
+
+  async function performCrud(){
+    const ep = document.getElementById('crud-endpoint').value;
+    const method = document.getElementById('crud-method').value;
+    const id = (document.getElementById('crud-id').value || '').trim();
+    const bodyText = document.getElementById('crud-body').value.trim();
+    const resultEl = document.getElementById('crud-result');
+    resultEl.textContent = 'Working...';
+
+    let url = `/api/${ep}/`;
+    if((method === 'PATCH' || method === 'DELETE') && id) url = `/api/${ep}/${id}/`;
+
+    const opts = { method: method, headers: {}, credentials: 'same-origin' };
+    if(method === 'POST' || method === 'PATCH'){
+      try{
+        opts.body = bodyText ? JSON.stringify(JSON.parse(bodyText)) : '';
+      }catch(e){ resultEl.textContent = 'Invalid JSON body: '+e; return; }
+      opts.headers['Content-Type'] = 'application/json';
+      // add CSRF token for session-authenticated requests
+      const csrftoken = getCookie('csrftoken') || getCookie('CSRF-TOKEN');
+      if(csrftoken) opts.headers['X-CSRFToken'] = csrftoken;
+    }
+
+    try{
+      const resp = await fetch(url, opts);
+      const ct = resp.headers.get('content-type') || '';
+      let out;
+      if(ct.includes('application/json')){
+        out = await resp.json();
+        resultEl.textContent = JSON.stringify({ status: resp.status, body: out }, null, 2);
+      } else {
+        const text = await resp.text();
+        resultEl.textContent = `HTTP ${resp.status}\n\n` + text;
+      }
+    }catch(err){
+      resultEl.textContent = 'Request failed: ' + err;
+    }
+  }
+</script>

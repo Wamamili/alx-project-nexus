@@ -174,24 +174,34 @@ else:
 # ----------------------------------------------
 # REST FRAMEWORK
 # ----------------------------------------------
-
 REST_FRAMEWORK = {
+    # Authentication classes
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ],
+
+    # Permission classes
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
+
+    # Filter backends
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
+
+    # Renderer classes — keep JSON and the browsable API by default. TemplateHTMLRenderer
+    # can be enabled per-view where an HTML template is provided. Including
+    # TemplateHTMLRenderer globally causes the API root to attempt HTML rendering
+    # (and it requires a `template_name`), which breaks when a view doesn't set one.
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
 }
 
-# Force DRF to return JSON only (disable browsable API/html responses)
-REST_FRAMEWORK.setdefault("DEFAULT_RENDERER_CLASSES", [
-    "rest_framework.renderers.JSONRenderer",
-])
+
 
 
 # ----------------------------------------------

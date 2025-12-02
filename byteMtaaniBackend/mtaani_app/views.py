@@ -8,8 +8,11 @@ from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework import permissions
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
 
 from .serializers import (
 	ProductSerializer, CategorySerializer, OrderSerializer, UserSerializer, PaymentSerializer
@@ -28,11 +31,32 @@ class ProductViewSet(viewsets.ModelViewSet):
 	serializer_class = ProductSerializer
 	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+	# Support rendering HTML list via the shared API template when Accept: text/html
+	renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+	def list(self, request, *args, **kwargs):
+		qs = self.filter_queryset(self.get_queryset())
+		page = self.paginate_queryset(qs)
+		serializer = self.get_serializer(page or qs, many=True)
+		if getattr(request, 'accepted_renderer', None) and getattr(request.accepted_renderer, 'format', None) == 'html':
+			return Response({'items': serializer.data, 'title': 'Products'}, template_name='api_root.html')
+		return Response(serializer.data)
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
 	queryset = Category.objects.all()
 	serializer_class = CategorySerializer
 	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+	renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+	def list(self, request, *args, **kwargs):
+		qs = self.filter_queryset(self.get_queryset())
+		page = self.paginate_queryset(qs)
+		serializer = self.get_serializer(page or qs, many=True)
+		if getattr(request, 'accepted_renderer', None) and getattr(request.accepted_renderer, 'format', None) == 'html':
+			return Response({'items': serializer.data, 'title': 'Categories'}, template_name='api_root.html')
+		return Response(serializer.data)
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
@@ -40,8 +64,19 @@ class CustomerViewSet(viewsets.ModelViewSet):
 	serializer_class = UserSerializer
 	permission_classes = [permissions.IsAuthenticated]
 
+	renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+	def list(self, request, *args, **kwargs):
+		qs = self.filter_queryset(self.get_queryset())
+		page = self.paginate_queryset(qs)
+		serializer = self.get_serializer(page or qs, many=True)
+		if getattr(request, 'accepted_renderer', None) and getattr(request.accepted_renderer, 'format', None) == 'html':
+			return Response({'items': serializer.data, 'title': 'Customers'}, template_name='api_root.html')
+		return Response(serializer.data)
+
 
 @api_view(['GET'])
+@renderer_classes([TemplateHTMLRenderer, JSONRenderer])
 @cache_page(60 * 15)
 def production_list(request):
 	"""Return all productions (products), cached at view level for 15 minutes.
@@ -50,6 +85,12 @@ def production_list(request):
 	"""
 	qs = get_all_properties()
 	serializer = ProductSerializer(qs, many=True)
+	# If the client requested HTML, render a template with the serialized data
+	if getattr(request, 'accepted_renderer', None) and getattr(request.accepted_renderer, 'format', None) == 'html':
+		# Template name should exist under your templates/ directory
+		return Response({ 'products': serializer.data }, template_name='productions/list.html')
+
+	# Default to JSON response
 	return Response(serializer.data)
 
 
@@ -64,6 +105,16 @@ class OrderViewSet(viewsets.ModelViewSet):
 	queryset = Order.objects.prefetch_related('items').all()
 	serializer_class = OrderSerializer
 	permission_classes = [permissions.IsAuthenticated]
+
+	renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+	def list(self, request, *args, **kwargs):
+		qs = self.filter_queryset(self.get_queryset())
+		page = self.paginate_queryset(qs)
+		serializer = self.get_serializer(page or qs, many=True)
+		if getattr(request, 'accepted_renderer', None) and getattr(request.accepted_renderer, 'format', None) == 'html':
+			return Response({'items': serializer.data, 'title': 'Orders'}, template_name='api_root.html')
+		return Response(serializer.data)
 
 	def create(self, request, *args, **kwargs):
 		serializer = self.get_serializer(data=request.data)
@@ -116,6 +167,16 @@ class PaymentViewSet(viewsets.ModelViewSet):
 	queryset = Payment.objects.all()
 	serializer_class = PaymentSerializer
 	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+	renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+	def list(self, request, *args, **kwargs):
+		qs = self.filter_queryset(self.get_queryset())
+		page = self.paginate_queryset(qs)
+		serializer = self.get_serializer(page or qs, many=True)
+		if getattr(request, 'accepted_renderer', None) and getattr(request.accepted_renderer, 'format', None) == 'html':
+			return Response({'items': serializer.data, 'title': 'Payments'}, template_name='api_root.html')
+		return Response(serializer.data)
 
 	@action(detail=False, methods=["post"], url_path="initiate", permission_classes=[permissions.IsAuthenticated])
 	def initiate(self, request):
