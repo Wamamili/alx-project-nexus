@@ -13,8 +13,8 @@ const mockProducts: Product[] = [
     rating: 4.5,
     reviews: 120,
     inStock: true,
-    name: undefined,
-    product_name: undefined
+    url_key: "Wireless Headphones",
+    product_name: "Wireless Headphones"
   },
   {
     id: "2",
@@ -26,8 +26,8 @@ const mockProducts: Product[] = [
     rating: 4.2,
     reviews: 80,
     inStock: true,
-    name: undefined,
-    product_name: undefined
+    url_key: "Smart Watch",
+    product_name: "Smart Watch"
   },
   {
     id: "3",
@@ -39,8 +39,8 @@ const mockProducts: Product[] = [
     rating: 4.8,
     reviews: 200,
     inStock: true,
-    name: undefined,
-    product_name: undefined
+    url_key: "Bluetooth Speaker",
+    product_name: "Bluetooth Speaker"
   }
 ];
 
@@ -87,7 +87,7 @@ export const fetchProductById = async (id: string): Promise<Product | null> => {
       rating: p.rating || 0,
       reviews: p.reviews || 0,
       inStock: p.in_stock !== false,
-      name: p.product_name,
+      url_key: p.product_name,
       product_name: p.product_name,
     };
   } catch (err) {
