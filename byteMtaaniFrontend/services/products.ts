@@ -7,40 +7,43 @@ const mockProducts: Product[] = [
     id: "1",
     title: "Wireless Headphones",
     description: "High-quality wireless headphones with noise cancellation.",
-    price: 59.99,
+    price: 2500.99,
     image: "/images/product-img1.jpg",
     category: "Electronics",
     rating: 4.5,
     reviews: 120,
     inStock: true,
     url_key: "Wireless Headphones",
-    product_name: "Wireless Headphones"
+    product_name: "Wireless Headphones",
+    stockCount: 0
   },
   {
     id: "2",
     title: "Smart Watch",
     description: "Fitness tracking watch with heart rate monitoring.",
-    price: 79.99,
+    price: 43000.99,
     image: "/images/product-img11.jpg",
     category: "Wearables",
     rating: 4.2,
     reviews: 80,
     inStock: true,
     url_key: "Smart Watch",
-    product_name: "Smart Watch"
+    product_name: "Smart Watch",
+    stockCount: 0
   },
   {
     id: "3",
     title: "Bluetooth Speaker",
     description: "Portable speaker with deep bass and long battery life.",
-    price: 39.99,
+    price: 3009.99,
     image: "/images/product-4.jpg",
     category: "Audio",
     rating: 4.8,
     reviews: 200,
     inStock: true,
     url_key: "Bluetooth Speaker",
-    product_name: "Bluetooth Speaker"
+    product_name: "Bluetooth Speaker",
+    stockCount: 0
   }
 ];
 
@@ -64,6 +67,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
       inStock: p.in_stock !== false,
       name: p.product_name,
       product_name: p.product_name,
+      stockCount: p.stock_count || 0,
     }));
   } catch (err) {
     console.warn('Failed to fetch products from API, using mock data:', err);
@@ -94,6 +98,7 @@ export const fetchProductById = async (id: string): Promise<Product | null> => {
       inStock: p.in_stock !== false,
       url_key: p.product_name,
       product_name: p.product_name,
+      stockCount: p.stock_count || 0,
     };
   } catch (err) {
     console.warn(`Failed to fetch product ${id} from API, checking mock data:`, err);

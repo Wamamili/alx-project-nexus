@@ -10,6 +10,7 @@ export interface Category {
 }
 
 export interface Product {
+  stockCount: number;
   product_name: string;
   id: string;
   title?: string;

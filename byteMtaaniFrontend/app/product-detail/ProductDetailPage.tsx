@@ -2,8 +2,7 @@
 "use client";
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+
 import Button from '@/components/ui/Button';
 import RatingBar from '@/components/ui/RatingBar';
 
@@ -30,7 +29,6 @@ export default function ProductDetailPage() {
 
   return (
     <div>
-      <Header />
       <main className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-1/2">
@@ -54,7 +52,6 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
