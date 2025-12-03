@@ -74,9 +74,14 @@ export const fetchProducts = async (): Promise<Product[]> => {
 /**
  * Fetch a single product by ID from backend API with fallback
  */
+const API_BASE =
+  typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : process.env.NEXT_PUBLIC_API_BASE || 'https://alx-project-nexus-bytemtaani-ecommerce.onrender.com';
+
 export const fetchProductById = async (id: string): Promise<Product | null> => {
   try {
-    const p = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000'}/api/products/${id}/`).then(r => r.json());
+    const p = await fetch(`${API_BASE}/api/products/${id}/`).then(r => r.json());
     return {
       id: p.id,
       title: p.product_name || p.title,

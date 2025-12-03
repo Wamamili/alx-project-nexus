@@ -1,6 +1,11 @@
+
 import { Product, Category, Order, OrderItem, Payment, PaginatedResponse } from '../interfaces/api';
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "alx-project-nexus-bytemtaani-clinton-wamamili.vercel.app";
+// Use Render backend in production, localhost in development
+export const API_BASE =
+  typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : process.env.NEXT_PUBLIC_API_BASE || 'https://alx-project-nexus-bytemtaani-ecommerce.onrender.com';
 
 /**
  * Generic fetch wrapper for API calls
