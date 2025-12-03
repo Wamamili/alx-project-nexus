@@ -7,9 +7,9 @@ export default async function ProductsPage() {
   const products = await fetchProducts();
 
   return (
-    <main className="max-w-6xl mx-auto px-4 py-8">
-      <header className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold">Products</h1>
+    <main>
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold mb-2">Products</h1>
         <div className="text-sm text-gray-600">Showing {products.length} items</div>
       </header>
 
