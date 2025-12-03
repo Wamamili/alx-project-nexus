@@ -105,17 +105,23 @@ WSGI_APPLICATION = "byteMtaaniBackend.wsgi.application"
 # ----------------------------------------------
 
 # Use DATABASE_URL when provided
+
+import dj_database_url
+import os
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
     DATABASES = {
-        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True  
+        )
     }
 else:
-    # If specific DB env vars are present, use them (MySQL). Otherwise fall back to a local
-    # SQLite DB for easy local development to avoid connection errors when Docker DB isn't present.
+    # MySQL or SQLite fallback
     try:
-        # Use explicit DB environment variables if provided
         db_name = env('DB_NAME')
         DATABASES = {
             'default': {
@@ -128,7 +134,6 @@ else:
             }
         }
     except Exception:
-        # Fallback: lightweight SQLite for local development
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',

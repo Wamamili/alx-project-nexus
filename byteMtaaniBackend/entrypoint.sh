@@ -1,20 +1,20 @@
-#!/bin/sh
+#!/bin/bash
+set -e
 
-echo "Waiting for database..."
-sleep 5
+# Apply database migrations
+echo "Applying database migrations..."
+python manage.py migrate
 
-python manage.py migrate --noinput
+# Collect static files
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
 
-if [ "$DJANGO_ENV" = "production" ]; then
-    echo "Collecting static files..."
-    python manage.py collectstatic --noinput
-fi
-
-echo "Starting Gunicorn..."
-# If a command is provided (e.g. celery worker/beat) run it, otherwise start gunicorn
-if [ "$#" -gt 0 ]; then
-    echo "Executing passed command: $@"
-    exec "$@"
+# Run Celery if first argument is "celery"
+if [ "$1" = "celery" ]; then
+    shift
+    echo "Starting Celery: $@"
+    exec celery "$@"
 else
-    exec gunicorn byteMtaaniBackend.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    echo "Starting Gunicorn..."
+    exec gunicorn byteMtaaniBackend.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 2
 fi
