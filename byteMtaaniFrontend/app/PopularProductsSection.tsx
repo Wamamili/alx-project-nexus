@@ -13,6 +13,7 @@ interface Product {
   image?: string;
   backgroundImage?: string;
   rating: number;
+  stockCount?: number;
 }
 
 interface Category {
@@ -35,14 +36,14 @@ export default function PopularProductsSection() {
   ];
 
   const defaultProducts: Product[] = [
-    { id: '1', product_name: 'Gaming Controller', price: 'Ksh 3,500', image: '/images/img_camera_1.png', rating: 5 },
-    { id: '2', product_name: 'Wireless Headphones', price: 'Ksh 1,500', backgroundImage: '/images/img_.png', rating: 5 },
-    { id: '3', product_name: 'Play Game', price: 'Ksh 2,000', backgroundImage: '/images/img__0x0.png', rating: 5 },
-    { id: '4', product_name: 'Tablet as a Laptop', price: 'Ksh 30,000', backgroundImage: '/images/img__1.png', rating: 5 },
-    { id: '5', product_name: 'Wireless Headphones', price: '$11,70', backgroundImage: '/images/img_.png', rating: 5 },
-    { id: '6', product_name: 'Play Game', price: 'Ksh 2,000', backgroundImage: '/images/img__0x0.png', rating: 5 },
-    { id: '7', product_name: 'Tablet as a Laptop', price: 'Ksh 30,000', backgroundImage: '/images/img__1.png', rating: 5 },
-    { id: '8', product_name: 'Play Game', price: 'Ksh 2,000', backgroundImage: '/images/img__0x0.png', rating: 5 },
+    { id: '1', product_name: 'Gaming Controller', price: 'Ksh 3,500', image: '/images/img_camera_1.png', rating: 5, stockCount: 12 },
+    { id: '2', product_name: 'Wireless Headphones', price: 'Ksh 1,500', backgroundImage: '/images/img_.png', rating: 5, stockCount: 8 },
+    { id: '3', product_name: 'Play Game', price: 'Ksh 2,000', backgroundImage: '/images/img__0x0.png', rating: 5, stockCount: 3 },
+    { id: '4', product_name: 'Tablet as a Laptop', price: 'Ksh 30,000', backgroundImage: '/images/img__1.png', rating: 5, stockCount: 2 },
+    { id: '5', product_name: 'Wireless Headphones', price: '$11,70', backgroundImage: '/images/img_.png', rating: 5, stockCount: 7 },
+    { id: '6', product_name: 'Play Game', price: 'Ksh 2,000', backgroundImage: '/images/img__0x0.png', rating: 5, stockCount: 0 },
+    { id: '7', product_name: 'Tablet as a Laptop', price: 'Ksh 30,000', backgroundImage: '/images/img__1.png', rating: 5, stockCount: 4 },
+    { id: '8', product_name: 'Play Game', price: 'Ksh 2,000', backgroundImage: '/images/img__0x0.png', rating: 5, stockCount: 6 },
   ];
 
   useEffect(() => {

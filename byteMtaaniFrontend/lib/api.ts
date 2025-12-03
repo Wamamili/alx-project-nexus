@@ -12,8 +12,8 @@ const USE_API = process.env.NEXT_PUBLIC_USE_API === 'true';
 
 // Minimal mock data used when frontend runs standalone
 const mockProducts: any[] = [
-  { id: '1', product_name: 'Wireless Earbuds', price: 2499, url_key: 'earbuds', image: '/images/earbuds.jpg', in_stock: true, stock_count: 25 },
-  { id: '2', product_name: 'Gaming Controller', price: 4599, url_key: 'controller', image: '/images/controller.jpg', in_stock: false, stock_count: 0 },
+  { id: '1', product_name: 'Wireless Earbuds', price: 2499, url_key: 'earbuds', image: '/images/earbuds.jpg', in_stock: true, stock_count: 25, stockCount: 25, inStock: true },
+  { id: '2', product_name: 'Gaming Controller', price: 4599, url_key: 'controller', image: '/images/controller.jpg', in_stock: false, stock_count: 0, stockCount: 0, inStock: false },
 ];
 
 /**
