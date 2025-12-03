@@ -12,19 +12,18 @@ export default function PromotionalSection() {
       {/* Promo section */}
       <div className="max-w-[1440px] mx-auto px-6">
         <div
-          className="w-full h-[320px] md:h-[360px] lg:h-[400px] rounded-[20px] bg-[#452829] flex items-center justify-between overflow-visible px-6 lg:px-16 relative"
+          className="w-full h-[320px] md:h-[360px] lg:h-[400px] rounded-[20px] bg-[#003F62] flex items-center justify-between overflow-visible px-6 lg:px-16 relative"
 
->
-  {/* Laptop Image */}
-  <div className="w-1/2 hidden md:block relative">
-    <img
-      src="/images/laptop.png"
-      alt="Laptop"
-      className="absolute right-0 bottom-0 h-[220px] md:h-[260px] lg:h-[300px] object-contain"
-    />
-  </div>
+        >
+          {/* Laptop Image */}
+          <div className="w-1/2 h-full flex items-center justify-center">
+            <img
+              src="/images/img__1.jpg"
+              alt="Laptop"
+              className="absolute w-[1315px] h-[417px] left-[64px] top-[1792px] rounded-[20px] object-cover"
+            />
 
-  </div>
+          </div>
 
           {/* Text Content */}
           <div className="w-1/2 text-white px-6 lg:px-10">

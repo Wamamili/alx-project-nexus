@@ -67,10 +67,10 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-2">Find product</h4>
             <ul className="space-y-1 text-gray-600">
-              <li><Link href="#">Brownze arnold</Link></li>
+              <li><Link href="#">Cameras</Link></li>
              <li><Link href="#">Smart phones</Link></li>
               <li><Link href="#">Automatic watch</Link></li>
-              <li><Link href="#">Hair straighteners</Link></li>
+              
             </ul>
           </div>
 
