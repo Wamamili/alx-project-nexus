@@ -1,17 +1,17 @@
 //app/product-detail/ProductDetailPage.tsx
 "use client";
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Image from 'next/image';
 
 import Button from '@/components/ui/Button';
 import RatingBar from '@/components/ui/RatingBar';
 
 interface Product {
+  [x: string]: ReactNode;
   id: string;
   product_name?: string;
   price: string;
   rating?: number;
-  stockCount?: number;
   image?: string;
 }
 
@@ -20,7 +20,6 @@ const sampleProduct: Product = {
   product_name: 'Sample Product',
   price: 'KSh 1,250',
   rating: 4.2,
-  stockCount: 12,
   image: '/images/img_placeholder.png',
 };
 
