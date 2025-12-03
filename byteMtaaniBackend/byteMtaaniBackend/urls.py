@@ -49,6 +49,32 @@ schema_view = get_schema_view(
 # ------------------------
 # URL Patterns
 # ------------------------
+
+# ------------------------
+# Root API Index
+# ------------------------
+from django.urls import reverse
+
+def root(request):
+    return JsonResponse({
+        "status": "OK",
+        "message": "Backend is live",
+        "api_index": {
+            "products": reverse("product-list"),
+            "categories": reverse("category-list"),
+            "orders": reverse("order-list"),
+            "customers": reverse("customer-list"),
+            "payments": reverse("payment-list"),
+            "productions": "/productions/",
+            "cache_metrics": "/cache-metrics/",
+            "mpesa_callback": "/mpesa/callback/",
+            "schema_json": "/api/schema.json",
+            "schema_yaml": "/api/schema.yaml",
+            "swagger_ui": "/api/schema/",
+            "redoc_docs": "/api/docs/",
+        }
+    })
+
 urlpatterns = [
     path('', root, name='root'),
     path('admin/', admin.site.urls),
