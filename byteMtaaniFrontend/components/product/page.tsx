@@ -7,8 +7,14 @@ import type { Product } from '../../interfaces';
 async function getProducts(): Promise<Product[]> {
   // Replace with real API/service fetch
   return [
-    { id: '1', product_name: 'Wireless Earbuds', price: 2499, url_key: 'earbuds', image: '/images/earbuds.jpg', inStock: true },
-    { id: '2', product_name: 'Gaming Controller', price: 4599, url_key: 'controller', image: '/images/controller.jpg', inStock: false },
+    {
+      id: '1', product_name: 'Wireless Earbuds', price: 2499, url_key: 'earbuds', image: '/images/earbuds.jpg', inStock: true,
+      stockCount: 0
+    },
+    {
+      id: '2', product_name: 'Gaming Controller', price: 4599, url_key: 'controller', image: '/images/controller.jpg', inStock: false,
+      stockCount: 0
+    },
   ];
 }
 
