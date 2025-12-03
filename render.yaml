@@ -30,13 +30,18 @@ services:
     dockerfilePath: byteMtaaniBackend/Dockerfile
     region: oregon
     branch: main
-    plan: free
+    plan: standard
+    healthCheckPath: /api/
+    healthCheckStartupTimeout: 300
     # Recommended environment variables to configure in Render dashboard
     envVars:
       - key: SECRET_KEY
         # mark as sensitive in Render (set via dashboard)
         sync: false
       - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        # Optional: use Render's Redis service; format: redis://user:password@host:port
         sync: false
       - key: DEBUG
         value: "False"
@@ -45,5 +50,47 @@ services:
       - key: CORS_ALLOWED_ORIGINS
         # Comma separated list if needed; for local dev we used http://localhost:4028
         value: "https://<your-frontend-service>.onrender.com"
-    # Command that will be run inside the Docker container (Render will use the Dockerfile)
-    # If you prefer, you can set a `startCommand` here that overrides the Dockerfile entrypoint.
+      - key: DJANGO_ENV
+        value: "production"
+    # Start the Django app with Gunicorn via entrypoint.sh
+    startCommand: ./byteMtaaniBackend/entrypoint.sh
+
+  - type: background
+    name: byteMtaani-celery-worker
+    env: docker
+    dockerfilePath: byteMtaaniBackend/Dockerfile
+    region: oregon
+    branch: main
+    plan: standard
+    startCommand: ./byteMtaaniBackend/entrypoint.sh celery -A byteMtaaniBackend worker --loglevel=info
+    envVars:
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: DEBUG
+        value: "False"
+      - key: DJANGO_ENV
+        value: "production"
+
+  - type: background
+    name: byteMtaani-celery-beat
+    env: docker
+    dockerfilePath: byteMtaaniBackend/Dockerfile
+    region: oregon
+    branch: main
+    plan: standard
+    startCommand: ./byteMtaaniBackend/entrypoint.sh celery -A byteMtaaniBackend beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    envVars:
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: DEBUG
+        value: "False"
+      - key: DJANGO_ENV
+        value: "production"

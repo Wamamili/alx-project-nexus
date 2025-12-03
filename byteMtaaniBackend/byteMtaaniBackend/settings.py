@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+
+
     # Third-party
     "corsheaders",
     "rest_framework",
@@ -67,14 +69,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = "byteMtaaniBackend.urls"
@@ -168,17 +171,13 @@ else:
 # ----------------------------------------------
 # REST FRAMEWORK
 # ----------------------------------------------
-REST_FRAMEWORK = {
-    # Authentication classes
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-    ],
 
-    # Permission classes
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
-    ],
+REST_FRAMEWORK = {
+   
+   # Default permission classes
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50,
 
     # Filter backends
     "DEFAULT_FILTER_BACKENDS": [
@@ -195,7 +194,15 @@ REST_FRAMEWORK = {
     ],
 }
 
-
+# ============================================================================
+# API DOCUMENTATION (drf-yasg)
+# ============================================================================
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'api_key': {'type': 'apiKey', 'in': 'header', 'name': 'Authorization'}
+    },
+}
 
 
 # ----------------------------------------------
@@ -208,11 +215,8 @@ CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL") or REDIS_URL or os.getenv("RE
 if os.getenv("DOCKER_COMPOSE") == "1" and not os.getenv("CELERY_BROKER_URL"):
     CELERY_BROKER_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@rabbitmq:5672//")
 
-# Use django-celery-results as the result backend when using RabbitMQ (recommended)
-if CELERY_BROKER_URL.startswith("amqp") and not os.getenv("CELERY_RESULT_BACKEND"):
-    CELERY_RESULT_BACKEND = "django-db"
-else:
-    CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND") or CELERY_BROKER_URL
+# Use django-celery-results as the result backend — stores task results in database
+CELERY_RESULT_BACKEND = "django-db"
 
 # Use JSON content by default
 CELERY_ACCEPT_CONTENT = ["json"]
@@ -220,8 +224,12 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
 
-# Use django-celery-beat scheduler when installed
+# Use django-celery-beat scheduler when installed (stores periodic tasks in database)
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# Task time limits (prevent hung workers on Render)
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes hard time limit
+CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 minutes soft time limit
 
 
 # ----------------------------------------------
@@ -261,12 +269,19 @@ USE_I18N = True
 USE_TZ = True
 
 
-# ----------------------------------------------
-# STATIC FILES
-# ----------------------------------------------
-
-STATIC_URL = "static/"
+# ============================================================================
+# STATIC & MEDIA FILES
+# ============================================================================
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [ BASE_DIR /  "static", ]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 
 # ----------------------------------------------
@@ -280,8 +295,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Email settings
 # ----------------------------------------------
 # Use console email backend by default for development. Override via .env
-EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@example.com")
+# ============================================================================
+# EMAIL CONFIGURATION
+# ============================================================================
+EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='no-reply@bytemtaani.com')
 
 
 # ----------------------------------------------

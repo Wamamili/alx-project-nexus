@@ -14,26 +14,26 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     # expose `Category_name` as `name` in the API for compatibility
-    name = serializers.CharField(source='Category_name')
-    # expose DB field `url_key` as `url_key` in API
-    url_key = serializers.CharField(source='url_key')
+    name = serializers.CharField(source='Category_name', read_only=True)
+    # expose DB field `slug` as `url_key` in API (source maps slug to url_key)
+    url_key = serializers.CharField(source='slug', read_only=True)
 
     class Meta:
         model = Category
-        # expose `url_key` as `url_key` to clients while preserving DB field name
+        # expose `url_key` (from slug) and `name` (from Category_name) to clients
         fields = ('id', 'name', 'url_key', 'created_at')
         read_only_fields = ('id', 'created_at')
 
 
 class ProductSerializer(serializers.ModelSerializer):
     # expose `product_name` as `name` for API clients
-    name = serializers.CharField(source='product_name')
-    # expose DB field `url_key` as `url_key` in API payloads
-    url_key = serializers.CharField(source='url_key')
+    name = serializers.CharField(source='product_name', read_only=True)
+    # expose DB field `slug` as `url_key` in API (source maps slug to url_key)
+    url_key = serializers.CharField(source='slug', read_only=True)
 
     class Meta:
         model = Product
-        # keep DB field `url_key` but present it as `url_key` to clients
+        # expose `url_key` (from slug) and `name` (from product_name) to clients
         fields = (
             'id', 'name', 'url_key', 'description', 'price', 'stock', 'in_stock', 'category', 'image_url', 'created_at', 'updated_at'
         )
