@@ -7,10 +7,43 @@ export const API_BASE =
     ? 'http://localhost:8000'
     : process.env.NEXT_PUBLIC_API_BASE || 'https://alx-project-nexus-bytemtaani-ecommerce.onrender.com';
 
+// Toggle to disable real API calls. Set NEXT_PUBLIC_USE_API=true to enable.
+const USE_API = process.env.NEXT_PUBLIC_USE_API === 'true';
+
+// Minimal mock data used when frontend runs standalone
+const mockProducts: any[] = [
+  { id: '1', product_name: 'Wireless Earbuds', price: 2499, url_key: 'earbuds', image: '/images/earbuds.jpg', in_stock: true, stock_count: 25 },
+  { id: '2', product_name: 'Gaming Controller', price: 4599, url_key: 'controller', image: '/images/controller.jpg', in_stock: false, stock_count: 0 },
+];
+
 /**
  * Generic fetch wrapper for API calls
  */
 export async function fetchJSON(path: string, init?: RequestInit) {
+  if (!USE_API) {
+    // Provide mock responses for common endpoints so frontend can run standalone
+    if (path.startsWith('/api/products')) {
+      const idMatch = path.match(/^\/api\/products\/(\d+)\/?/);
+      if (idMatch) {
+        const id = idMatch[1];
+        const item = mockProducts.find((p) => p.id === id);
+        if (item) return item;
+        const notFound = { detail: 'Not found.' };
+        return notFound;
+      }
+      // list (support pagination query strings)
+      return { results: mockProducts } as any;
+    }
+    if (path.startsWith('/api/categories')) {
+      return [] as any;
+    }
+    if (path.startsWith('/api/orders') || path.startsWith('/api/payments') || path.startsWith('/api/customers')) {
+      return [] as any;
+    }
+    // default mock
+    return {} as any;
+  }
+
   const res = await fetch(API_BASE + path, init);
   if (!res.ok) {
     const text = await res.text();
