@@ -1,0 +1,12 @@
+# Ignore Python virtual environment and cache files
+venv/
+# Ignore compiled Python files and cache directories
+__pycache__/
+# Ignore macOS system files
+*.pyc
+# Ignore macOS system files
+.DS_Store
+# Ignore environment variable files
+.env
+# Ignore database migration files
+migrations/
