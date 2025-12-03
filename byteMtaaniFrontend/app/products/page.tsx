@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-import { fetchProducts } from "../../services/products";
+import mockProducts from "../../services/products";
 
 export default async function ProductsPage() {
-  const products = await fetchProducts();
+  // Using local mock data to avoid backend API during development/build
+  const products = mockProducts;
 
   return (
     <main>
