@@ -1,6 +1,6 @@
 import { Product, Category, Order, OrderItem, Payment, PaginatedResponse } from '../interfaces/api';
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000";
+export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "alx-project-nexus-bytemtaani-clinton-wamamili.vercel.app";
 
 /**
  * Generic fetch wrapper for API calls
